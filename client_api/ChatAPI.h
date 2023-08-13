@@ -7,6 +7,9 @@
 
 #include "Mediator.h"
 #include "../model/User.h"
+#include "../model/Message.h"
+
+//TODO: use ObservableSocket to do comunication, MAKE SURE SERVER WORKS FIRST!!
 
 class ChatAPI : public Component {
 public:
@@ -18,14 +21,12 @@ public:
 
     bool signOut();
 
-    bool sendMessage(const std::string& message);
+    bool sendMessage(const Message& message);
 
-    
+    Message receiveMessage();
 
 private:
     User currentUser;
-
-
 
 };
 
