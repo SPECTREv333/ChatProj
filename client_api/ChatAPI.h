@@ -5,6 +5,7 @@
 #ifndef CHATPROJ_CHATAPI_H
 #define CHATPROJ_CHATAPI_H
 
+#include <map>
 #include "Mediator.h"
 #include "../model/User.h"
 #include "../model/Message.h"
@@ -12,7 +13,8 @@
 
 //TODO: use ObservableSocket to do comunication, MAKE SURE SERVER WORKS FIRST!!
 
-class ChatAPI : public Component {
+// facade for client side
+class ChatAPI : public Component, public Observer {
 public:
     ChatAPI();
 
@@ -22,13 +24,19 @@ public:
 
     bool signOut();
 
-    bool sendMessage(const Message& message);
+    void sendMessage(const Message& message);
 
-    Message receiveMessage();
+    Message * receiveMessage();
+
+    bool refreshUsers();
+
+    void update() override;
 
 private:
     User currentUser;
     ObservableSocket *socket;
+    std::map<int, User> users;
+
 
 };
 

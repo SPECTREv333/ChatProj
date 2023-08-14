@@ -10,6 +10,9 @@
 #include "PacketFactory.h"
 #include "concrete_packets/SignIn.h"
 #include "concrete_packets/SignOut.h"
+#include "concrete_packets/MessagePacket.h"
+#include "concrete_packets/UserList.h"
+#include "concrete_packets/UserListResponse.h"
 
 //TODO: signX methods code duplication, refactor if possible
 
@@ -70,5 +73,57 @@ bool ChatAPI::signOut() {
     }
     return false;
 }
+
+void ChatAPI::sendMessage(const Message &message) {
+    Packet* packet = new MessagePacket(message.getSender().getId(), message.getReceiver().getId(), message.getContent());
+    socket->write(packet->encode());
+    delete packet;
+}
+
+Message * ChatAPI::receiveMessage() {
+    std::string raw = socket->read();
+    Packet* packet = PacketFactory::decode(raw);
+    MessagePacket *messagePacket = nullptr;
+    if (packet && packet->getHeader() == MessagePacket::headerString)
+        messagePacket = reinterpret_cast<MessagePacket*>(packet);
+
+    if (!messagePacket || messagePacket->getReceiverId() != currentUser.getId())
+        return nullptr;
+
+    if (users.find(messagePacket->getSenderId()) == users.end())
+        refreshUsers();
+
+    if (users.find(messagePacket->getSenderId()) == users.end()) //TODO: maybe extract to utility function
+        return nullptr;
+
+    return new Message(users[messagePacket->getSenderId()], users[messagePacket->getReceiverId()], messagePacket->getMessage());
+}
+
+void ChatAPI::update() {
+    if (mediator)
+        mediator->notify(this, "newmessage");
+}
+
+bool ChatAPI::refreshUsers() {
+    Packet* packet = new UserList();
+    socket->write(packet->encode());
+    delete packet;
+    std::string raw = socket->syncread();
+    packet = PacketFactory::decode(raw);
+    UserListResponse *response = nullptr;
+    if (packet && packet->getHeader() == UserListResponse::headerString)
+        response = reinterpret_cast<UserListResponse*>(packet);
+
+    if (response){
+        for (const auto& user : response->getUsers()){
+            users[user.getId()] = user;
+        }
+        return true;
+    }
+    delete packet;
+    return false;
+}
+
+
 
 
