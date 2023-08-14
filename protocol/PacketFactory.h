@@ -9,7 +9,7 @@
 
 class PacketFactory {
 public:
-    static Packet *decode(std::string raw);
+    static Packet *decode(const std::string &raw);
 };
 
 
