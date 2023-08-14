@@ -6,6 +6,8 @@
 #include "concrete_packets/SignUp.h"
 #include "concrete_packets/SignIn.h"
 #include "concrete_packets/SignXResponse.h"
+#include "concrete_packets/UserList.h"
+#include "concrete_packets/UserListResponse.h"
 
 Packet *PacketFactory::decode(const std::string &raw) {
     Packet* decoded = nullptr;
@@ -18,6 +20,10 @@ Packet *PacketFactory::decode(const std::string &raw) {
         decoded = new SignIn();
     } else if (type == SignXResponse::headerString){
         decoded = new SignXResponse();
+    } else if (type == UserList::headerString){
+        decoded = new UserList();
+    } else if (type == UserListResponse::headerString){
+        decoded = new UserListResponse();
     }
 
     if (decoded) {
