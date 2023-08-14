@@ -21,6 +21,8 @@ public:
 
     std::string read() override;
 
+    std::string syncread() override;
+
     void write(const std::string &text) override;
 
     void notify() override;

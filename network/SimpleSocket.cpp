@@ -5,7 +5,7 @@
 #include "SimpleSocket.h"
 
 SimpleSocket::SimpleSocket() {
-    socket = new Socket("127.0.0.1", 6666);
+    socket = new Socket("127.0.0.1", 6666); //TODO: make this configurable
     socket->addObserver(this);
 }
 
@@ -32,4 +32,8 @@ void SimpleSocket::removeObserver(Observer *o) {
 
 void SimpleSocket::update() {
     notify();
+}
+
+std::string SimpleSocket::syncread() {
+    return socket->syncread();
 }

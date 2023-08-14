@@ -8,12 +8,13 @@
 #include "Mediator.h"
 #include "../model/User.h"
 #include "../model/Message.h"
+#include "../network/ObservableSocket.h"
 
 //TODO: use ObservableSocket to do comunication, MAKE SURE SERVER WORKS FIRST!!
 
 class ChatAPI : public Component {
 public:
-    ChatAPI() = default;
+    ChatAPI();
 
     bool signUp(const std::string& nickname, const std::string& password);
 
@@ -27,6 +28,7 @@ public:
 
 private:
     User currentUser;
+    ObservableSocket *socket;
 
 };
 

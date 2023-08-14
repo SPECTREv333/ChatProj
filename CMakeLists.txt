@@ -7,7 +7,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 
-include_directories(patterns)
+include_directories(patterns protocol)
 
 find_package(Qt6 COMPONENTS
         Core

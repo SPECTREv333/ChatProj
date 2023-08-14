@@ -5,9 +5,11 @@
 #ifndef CHATPROJ_PACKETFACTORY_H
 #define CHATPROJ_PACKETFACTORY_H
 
+#include "Packet.h"
 
 class PacketFactory {
-
+public:
+    static Packet *decode(std::string raw);
 };
 
 
