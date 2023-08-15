@@ -15,7 +15,7 @@ void SocketServer::newConnection() {
 
 void SocketServer::onDisconnect() {
     auto *socket = reinterpret_cast<QTcpSocket *>(sender());
-    eventSocketServer->notify(clients[socket], "disconnected");
+    eventSocketServer->notify(this, "disconnected");
     clients.remove(socket);
 }
 
@@ -33,6 +33,15 @@ void SocketServer::addConnection(QTcpSocket *socket) {
     connect(socket, &QTcpSocket::disconnected, this, &SocketServer::onDisconnect);
 
     eventSocketServer->notify(connection, "newConnection");
+}
+
+SocketServer::SocketServer(int port, EventSocketServer *mediator) {
+    server = new QTcpServer(this);
+    eventSocketServer = mediator;
+
+    if (server->listen(QHostAddress::Any, port)) {
+        connect(server, &QTcpServer::newConnection, this, &SocketServer::newConnection);
+    }
 }
 
 

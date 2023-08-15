@@ -21,7 +21,11 @@ add_executable(ChatProj main.cpp protocol/Packet.h protocol/PacketFactory.cpp pr
         network/SocketServer.h
         network/SocketServer.cpp
         server/ChatServer.cpp
-        server/ChatServer.h)
+        server/ChatServer.h
+        server/UsersDatabase.cpp
+        server/UsersDatabase.h
+        server/UserEntry.cpp
+        server/UserEntry.h)
 target_link_libraries(ChatProj
         Qt::Core
         Qt::Gui

@@ -15,7 +15,7 @@ class SocketServer : public QObject, public Component {
 Q_OBJECT
 
 public:
-    SocketServer() = default;
+    SocketServer(int port, EventSocketServer* mediator);
 
     void addConnection(QTcpSocket *socket);
 

@@ -10,7 +10,7 @@
 
 class EventSocketServer : public Mediator {
 public:
-    virtual ~EventSocketServer() = 0;
+    virtual ~EventSocketServer() = default;
 
     void notify(Component *sender, const std::string &event) override = 0;
 
