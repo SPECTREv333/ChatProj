@@ -1,0 +1,40 @@
+//
+// Created by Leonardo on 15/08/23.
+//
+
+#include "SocketServer.h"
+#include "Socket.h"
+#include "SimpleSocket.h"
+
+void SocketServer::newConnection() {
+    while (server->hasPendingConnections()) {
+        QTcpSocket* socket = server->nextPendingConnection();
+        addConnection(socket);
+    }
+}
+
+void SocketServer::onDisconnect() {
+    auto *socket = reinterpret_cast<QTcpSocket *>(sender());
+    eventSocketServer->notify(clients[socket], "disconnected");
+    clients.remove(socket);
+}
+
+void SocketServer::newMessage() {
+    auto *socket = reinterpret_cast<QTcpSocket *>(sender());
+    eventSocketServer->notify(clients[socket], "newMessage");
+}
+
+void SocketServer::addConnection(QTcpSocket *socket) {
+    ObservableSocket* connection = new SimpleSocket(new Socket(socket));
+
+    clients.insert(socket, connection);
+
+    connect(socket, &QTcpSocket::readyRead, this, &SocketServer::newMessage);
+    connect(socket, &QTcpSocket::disconnected, this, &SocketServer::onDisconnect);
+
+    eventSocketServer->notify(connection, "newConnection");
+}
+
+
+
+

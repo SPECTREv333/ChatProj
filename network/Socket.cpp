@@ -87,3 +87,16 @@ void Socket::notify() {
         observer->update();
     }
 }
+
+const QTcpSocket *Socket::getSocket() const {
+    return socket;
+}
+
+void Socket::setSocket(QTcpSocket *socket) {
+    this->socket->deleteLater();
+    this->socket = socket;
+}
+
+Socket::Socket(QTcpSocket *socket, QObject *parent) {
+    this->socket = socket;
+}

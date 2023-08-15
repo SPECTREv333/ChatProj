@@ -20,9 +20,15 @@ public:
     explicit Socket(const std::string &serverAddress = "localhost", int serverPort = 6666,
                     QObject *parent = nullptr);
 
+    explicit Socket(QTcpSocket *socket, QObject *parent = nullptr);
+
     ~Socket() override;
 
     const bool isConnected() const;
+
+    const QTcpSocket *getSocket() const;
+
+    void setSocket(QTcpSocket *socket);
 
     const std::string syncread();
 

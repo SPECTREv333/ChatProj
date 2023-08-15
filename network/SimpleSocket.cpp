@@ -37,3 +37,12 @@ void SimpleSocket::update() {
 std::string SimpleSocket::syncread() {
     return socket->syncread();
 }
+
+SimpleSocket::SimpleSocket(Socket *socket) {
+    this->socket = socket;
+    socket->addObserver(this);
+}
+
+SimpleSocket::~SimpleSocket() {
+    delete socket;
+}

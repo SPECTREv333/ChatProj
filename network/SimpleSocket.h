@@ -19,6 +19,10 @@ class SimpleSocket : public ObservableSocket, public Observer {
 public:
     SimpleSocket();
 
+    explicit SimpleSocket(Socket *socket);
+
+    ~SimpleSocket() override;
+
     std::string read() override;
 
     std::string syncread() override;
