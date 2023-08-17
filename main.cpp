@@ -16,12 +16,7 @@ int main(int argc, char *argv[]) {
 
     ChatAPI chatAPI2;
     chatAPI2.signIn("user2", "pass2");
-    qDebug() << "current:" << QString::fromStdString(chatAPI2.getCurrentUser().getNickname());
-    //print user id to verify that the user is the same
-    qDebug() << "current:" << chatAPI2.getCurrentUser().getId();
     auto* chatRegister2 = new ChatRegister(chatAPI2.getCurrentUser());
-
-    exit(0);
 
     ChatApp chatApp1(&chatAPI1, chatRegister1, dynamic_cast<QWidget*>(&a));
 

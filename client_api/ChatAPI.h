@@ -22,11 +22,11 @@ class ChatAPI : public Component, public Observer {
 public:
     ChatAPI();
 
-    bool signUp(const std::string &nickname, const std::string &password);
+    void signUp(const std::string &nickname, const std::string &password);
 
-    bool signIn(const std::string &nickname, const std::string &password);
+    void signIn(const std::string &nickname, const std::string &password);
 
-    bool signOut();
+    void signOut();
 
     void sendMessage(const Message &message);
 

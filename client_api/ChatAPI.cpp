@@ -21,33 +21,34 @@ ChatAPI::ChatAPI() {
     socket->addObserver(this);
 }
 
-bool ChatAPI::signUp(const std::string &nickname, const std::string &password) {
-    Packet* packet = new SignUp(nickname, password);
+void ChatAPI::signUp(const std::string &nickname, const std::string &password) {
+    Packet *packet = new SignUp(nickname, password);
     socket->write(packet->encode());
     currentUser.setNickname(nickname);
     delete packet;
 }
 
-bool ChatAPI::signIn(const std::string &nickname, const std::string &password) {
-    Packet* packet = new SignIn(nickname, password);
+void ChatAPI::signIn(const std::string &nickname, const std::string &password) {
+    Packet *packet = new SignIn(nickname, password);
     socket->write(packet->encode());
     currentUser.setNickname(nickname);
     delete packet;
 }
 
-bool ChatAPI::signOut() {
-    Packet* packet = new SignOut(currentUser.getId());
+void ChatAPI::signOut() {
+    Packet *packet = new SignOut(currentUser.getId());
     socket->write(packet->encode());
     delete packet;
 }
 
 void ChatAPI::sendMessage(const Message &message) {
-    Packet* packet = new MessagePacket(message.getSender().getId(), message.getReceiver().getId(), message.getContent());
+    Packet *packet = new MessagePacket(message.getSender().getId(), message.getReceiver().getId(),
+                                       message.getContent());
     socket->write(packet->encode());
     delete packet;
 }
 
-Message * ChatAPI::receiveMessage() {
+Message *ChatAPI::receiveMessage() {
     return lastMessage;
 }
 
@@ -55,26 +56,27 @@ void ChatAPI::update() {
     std::string raw = socket->read();
     Packet *packet = PacketFactory::decode(raw);
     if (packet) {
-        if (packet->getHeader() == SignXResponse::headerString)
-            handleSignXResponse(reinterpret_cast<SignXResponse*>(packet));
-        else if (packet->getHeader() == MessagePacket::headerString) {
+        if (packet->getHeader() == SignXResponse::headerString) {
+            handleSignXResponse(reinterpret_cast<SignXResponse *>(packet));
+        } else if (packet->getHeader() == MessagePacket::headerString) {
             handleMessagePacket(reinterpret_cast<MessagePacket *>(packet));
-            mediator->notify(this, "newmessage");
+        } else if (packet->getHeader() == UserListResponse::headerString) {
+            handleUserListResponse(reinterpret_cast<UserListResponse *>(packet));
         }
-        else if (packet->getHeader() == UserListResponse::headerString)
-            handleUserListResponse(reinterpret_cast<UserListResponse*>(packet));
     }
 }
 
 void ChatAPI::handleSignXResponse(SignXResponse *response) {
-    if (response->isSuccess()){
+    if (response->isSuccess()) {
         currentUser.setId(response->getUniqueId());
+        mediator->notify(this, "signedIn");
+    } else {
+        mediator->notify(this, "signInFailed");
     }
-    mediator->notify(this, "signxresponse");
 }
 
 void ChatAPI::handleMessagePacket(MessagePacket *packet) {
-    if (packet->getReceiverId() == currentUser.getId()){
+    if (packet->getReceiverId() == currentUser.getId()) {
         if (users.find(packet->getSenderId()) == users.end())
             refreshUsers();
 
@@ -82,25 +84,28 @@ void ChatAPI::handleMessagePacket(MessagePacket *packet) {
             return;
 
         lastMessage = new Message(users[packet->getSenderId()], users[packet->getReceiverId()], packet->getMessage());
+
+        mediator->notify(this, "newMessage");
     }
 }
 
 void ChatAPI::handleUserListResponse(UserListResponse *packet) {
-    for (const auto& user : packet->getUsers()){
+    for (const auto &user: packet->getUsers()) {
         users[user.getId()] = user;
     }
+    mediator->notify(this, "userListUpdated");
 }
 
 
 bool ChatAPI::refreshUsers() {
-    Packet* packet = new UserList();
+    Packet *packet = new UserList();
     socket->write(packet->encode());
     delete packet;
 }
 
 std::list<User> ChatAPI::getUsers() const {
     std::list<User> userList;
-    for (const auto& user : users){
+    for (const auto &user: users) {
         userList.push_back(user.second);
     }
     return userList;

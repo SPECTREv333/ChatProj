@@ -11,7 +11,8 @@ ChatView::~ChatView() {
     delete ui;
 }
 
-ChatView::ChatView(Chat *model, ChatController *controller, QWidget *parent) : model(model), controller(controller), QWidget(parent), ui(new Ui::ChatView) {
+ChatView::ChatView(Chat *model, ChatController *controller, QWidget *parent) : model(model), controller(controller),
+                                                                               QWidget(parent), ui(new Ui::ChatView) {
     ui->setupUi(this);
     model->addObserver(this);
     connect(ui->sendButton, SIGNAL(pressed()), this, SLOT(onSendPressed()));
@@ -19,9 +20,9 @@ ChatView::ChatView(Chat *model, ChatController *controller, QWidget *parent) : m
 }
 
 void ChatView::update() {
-    QTextEdit* textEdit = ui->textEdit;
-    textEdit->append(("<bold><" + model->getMessages().back()->getSender().getNickname() + ">:</bold>").c_str());
-    textEdit->append(model->getMessages().back()->getContent().c_str());
+    QTextEdit *textEdit = ui->textEdit;
+    textEdit->insertHtml(QString::fromStdString("<b>" + model->getMessages().back()->getSender().getNickname()
+                                                + "</b>: " + model->getMessages().back()->getContent() + "<br>"));
 }
 
 void ChatView::onSendPressed() {

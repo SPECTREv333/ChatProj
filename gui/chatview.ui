@@ -2,6 +2,8 @@
 <ui version="4.0">
  <class>ChatView</class>
  <widget class="QWidget" name="ChatView">
+
+
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -34,6 +36,7 @@
     </widget>
    </item>
   </layout>
+
  </widget>
  <resources/>
  <connections/>
