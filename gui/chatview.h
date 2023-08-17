@@ -5,7 +5,7 @@
 #ifndef CHATPROJ_CHATVIEW_H
 #define CHATPROJ_CHATVIEW_H
 
-#include <QWidget>
+#include <QMainWindow>
 #include "../model/Chat.h"
 #include "ChatController.h"
 
@@ -14,7 +14,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class ChatView; }
 QT_END_NAMESPACE
 
-class ChatView : public QWidget, public Observer {
+class ChatView : public QMainWindow, public Observer {
 Q_OBJECT
 
 public:

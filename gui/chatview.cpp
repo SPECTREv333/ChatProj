@@ -12,7 +12,7 @@ ChatView::~ChatView() {
 }
 
 ChatView::ChatView(Chat *model, ChatController *controller, QWidget *parent) : model(model), controller(controller),
-                                                                               QWidget(parent), ui(new Ui::ChatView) {
+                                                                               QMainWindow(parent), ui(new Ui::ChatView) {
     ui->setupUi(this);
     model->addObserver(this);
     connect(ui->sendButton, SIGNAL(pressed()), this, SLOT(onSendPressed()));
