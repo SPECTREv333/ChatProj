@@ -9,9 +9,12 @@
 
 
 ChatRegisterView::ChatRegisterView(ChatRegister *model, ChatRegisterController* controller, QWidget *parent) :
-        controller(controller), QWidget(parent), ui(new Ui::ChatRegisterView) {
+        model(model), controller(controller), QWidget(parent), ui(new Ui::ChatRegisterView) {
     ui->setupUi(this);
     model->addObserver(this);
+    setWindowTitle("Hello, " + QString::fromStdString(model->getCurrentUser().getNickname()) + "!");
+    connect(ui->refreshButton, &QPushButton::pressed, this, &ChatRegisterView::onRefreshPressed);
+    connect(ui->openButton, &QPushButton::pressed, this, &ChatRegisterView::onOpenPressed);
 }
 
 ChatRegisterView::~ChatRegisterView() {
@@ -19,13 +22,13 @@ ChatRegisterView::~ChatRegisterView() {
 }
 
 void ChatRegisterView::update() {
-    ui->tableWidget->clear();
+    //ui->tableWidget->clear();
+    ui->tableWidget->setRowCount(0);
     for (auto& chat : model->getChats()) {
         auto* id = new QTableWidgetItem(QString::number(chat->getRemoteUser().getId()));
-        ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-        ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 0, id);
         auto* nickname = new QTableWidgetItem(chat->getRemoteUser().getNickname().c_str());
         ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+        ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 0, id);
         ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 1, nickname);
     }
 }

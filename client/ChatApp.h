@@ -12,10 +12,12 @@
 #include "../gui/ChatRegisterController.h"
 #include "../gui/chatregisterview.h"
 
-class ChatApp : public QMainWindow {
+class ChatApp : public QMainWindow, public Mediator {
 Q_OBJECT
 public:
-    ChatApp(ChatAPI *chatAPI, ChatRegister *chatRegister);
+    ChatApp(ChatAPI *chatAPI, ChatRegister *chatRegister, QWidget *parent = nullptr);
+
+    void notify(Component *sender, const std::string& event) override;
 
 private:
     ChatAPI *chatAPI;

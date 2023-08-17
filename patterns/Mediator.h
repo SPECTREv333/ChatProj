@@ -18,7 +18,9 @@ class Component {
 protected:
     Mediator *mediator;
 public:
-    explicit Component() = default;
+    explicit Component() {
+        mediator = nullptr;
+    };
 
     explicit Component(Mediator *mediator) : mediator(mediator) {}
 

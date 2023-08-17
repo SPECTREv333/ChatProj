@@ -25,7 +25,7 @@ public:
 
 private:
     int idCounter = 0;
-    std::vector<UserEntry> users;
+    std::vector<UserEntry*> users;
     std::map<std::string, UserEntry*> usernameMap;
     std::map<int, UserEntry*> idMap;
 

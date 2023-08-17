@@ -16,10 +16,11 @@ bool UsersDatabase::authenticate(const std::string &username, const std::string 
 bool UsersDatabase::registerUser(const std::string &username, const std::string &password, ObservableSocket *socket) {
     auto it = usernameMap.find(username);
     if (it == usernameMap.end()) {
-        User user(idCounter++, username);
-        users.emplace_back(user, password, socket);
-        usernameMap.insert(std::pair<std::string, UserEntry *>(username, &users.back()));
-        idMap.insert(std::pair<int, UserEntry *>(idCounter++, &users.back()));
+        User user(++idCounter, username);
+        auto *newUser = new UserEntry(user, password, socket);
+        users.push_back(newUser);
+        usernameMap.insert(std::pair<std::string, UserEntry *>(username, newUser));
+        idMap.insert(std::pair<int, UserEntry *>(idCounter, newUser));
         return true;
     }
     return false;
@@ -42,7 +43,7 @@ UserEntry *UsersDatabase::getUserByUsername(const std::string &username) {
 std::vector<User> UsersDatabase::getUserList() const {
     std::vector<User> userList;
     for (auto it = users.begin(); it != users.end(); ++it) {
-        userList.push_back(it->getUser());
+        userList.push_back((*it)->getUser()); //FIXME: use smart pointers
     }
     return userList;
 }
