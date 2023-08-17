@@ -6,6 +6,7 @@
 #define CHATPROJ_CHATAPI_H
 
 #include <map>
+#include <list>
 #include "Mediator.h"
 #include "../model/User.h"
 #include "../model/Message.h"
@@ -29,6 +30,8 @@ public:
     Message * receiveMessage();
 
     bool refreshUsers();
+
+    std::list <User> getUsers() const;
 
     void update() override;
 

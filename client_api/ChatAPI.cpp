@@ -124,6 +124,14 @@ bool ChatAPI::refreshUsers() {
     return false;
 }
 
+std::list<User> ChatAPI::getUsers() const {
+    std::list<User> userList;
+    for (const auto& user : users){
+        userList.push_back(user.second);
+    }
+    return userList;
+}
+
 
 
 

@@ -25,7 +25,24 @@ add_executable(ChatProj main.cpp protocol/Packet.h protocol/PacketFactory.cpp pr
         server/UsersDatabase.cpp
         server/UsersDatabase.h
         server/UserEntry.cpp
-        server/UserEntry.h)
+        server/UserEntry.h
+        model/Chat.cpp
+        model/Chat.h
+        model/ChatRegister.cpp
+        model/ChatRegister.h
+        client/ChatApp.cpp
+        client/ChatApp.h
+        gui/chatregisterview.cpp
+        gui/chatregisterview.h
+        gui/chatregisterview.ui
+        gui/ChatRegisterController.cpp
+        gui/ChatRegisterController.h
+        gui/chatview.cpp
+        gui/chatview.h
+        gui/chatview.ui
+        gui/ChatController.cpp
+        gui/ChatController.h
+)
 target_link_libraries(ChatProj
         Qt::Core
         Qt::Gui
