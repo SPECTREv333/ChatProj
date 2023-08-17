@@ -11,6 +11,9 @@
 #include "../model/User.h"
 #include "../model/Message.h"
 #include "../network/ObservableSocket.h"
+#include "concrete_packets/SignXResponse.h"
+#include "concrete_packets/MessagePacket.h"
+#include "concrete_packets/UserListResponse.h"
 
 //TODO: use ObservableSocket to do comunication, MAKE SURE SERVER WORKS FIRST!!
 
@@ -19,26 +22,34 @@ class ChatAPI : public Component, public Observer {
 public:
     ChatAPI();
 
-    bool signUp(const std::string& nickname, const std::string& password);
+    bool signUp(const std::string &nickname, const std::string &password);
 
-    bool signIn(const std::string& nickname, const std::string& password);
+    bool signIn(const std::string &nickname, const std::string &password);
 
     bool signOut();
 
-    void sendMessage(const Message& message);
+    void sendMessage(const Message &message);
 
-    Message * receiveMessage();
+    Message *receiveMessage();
 
     bool refreshUsers();
 
-    std::list <User> getUsers() const;
+    const User &getCurrentUser() const;
+
+    std::list<User> getUsers() const;
 
     void update() override;
 
 private:
+
+    void handleSignXResponse(SignXResponse *response);
+    void handleMessagePacket(MessagePacket *packet);
+    void handleUserListResponse(UserListResponse *packet);
+
     User currentUser;
     ObservableSocket *socket;
     std::map<int, User> users;
+    Message *lastMessage;
 
 
 };

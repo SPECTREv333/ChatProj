@@ -62,6 +62,8 @@ void ChatServer::handleGetUserList(ObservableSocket *sender, UserList *packet) {
 
 ChatServer::ChatServer(int port) {
     socketServer = new SocketServer(port, this);
+    usersDatabase.registerUser("user1", "pass1", nullptr);
+    usersDatabase.registerUser("user2", "pass2", nullptr);
 }
 
 ChatServer::~ChatServer() {

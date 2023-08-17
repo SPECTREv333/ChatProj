@@ -18,60 +18,27 @@
 
 ChatAPI::ChatAPI() {
     socket = new SimpleSocket();
+    socket->addObserver(this);
 }
 
 bool ChatAPI::signUp(const std::string &nickname, const std::string &password) {
     Packet* packet = new SignUp(nickname, password);
     socket->write(packet->encode());
+    currentUser.setNickname(nickname);
     delete packet;
-    std::string raw = socket->syncread();
-    packet = PacketFactory::decode(raw);
-    SignXResponse *response = nullptr;
-    if (packet && packet->getHeader() == SignXResponse::headerString)
-        response = reinterpret_cast<SignXResponse*>(packet);
-
-    if (response && response->isSuccess()){
-        currentUser.setNickname(nickname);
-        currentUser.setId(response->getUniqueId());
-        delete response;
-        return true;
-    }
-    delete packet;
-    return false;
 }
 
 bool ChatAPI::signIn(const std::string &nickname, const std::string &password) {
     Packet* packet = new SignIn(nickname, password);
     socket->write(packet->encode());
+    currentUser.setNickname(nickname);
     delete packet;
-    std::string raw = socket->syncread();
-    packet = PacketFactory::decode(raw);
-    SignXResponse *response = nullptr;
-    if (packet && packet->getHeader() == SignXResponse::headerString)
-        response = reinterpret_cast<SignXResponse*>(packet);
-
-    if (response && response->isSuccess()){
-        currentUser.setNickname(nickname);
-        currentUser.setId(response->getUniqueId());
-        return true;
-    }
-    return false;
 }
 
 bool ChatAPI::signOut() {
     Packet* packet = new SignOut(currentUser.getId());
     socket->write(packet->encode());
     delete packet;
-    std::string raw = socket->syncread();
-    packet = PacketFactory::decode(raw);
-    SignXResponse *response = nullptr;
-    if (packet && packet->getHeader() == SignXResponse::headerString)
-        response = reinterpret_cast<SignXResponse*>(packet);
-
-    if (response && response->isSuccess()){
-        return true;
-    }
-    return false;
 }
 
 void ChatAPI::sendMessage(const Message &message) {
@@ -81,47 +48,54 @@ void ChatAPI::sendMessage(const Message &message) {
 }
 
 Message * ChatAPI::receiveMessage() {
-    std::string raw = socket->read();
-    Packet* packet = PacketFactory::decode(raw);
-    MessagePacket *messagePacket = nullptr;
-    if (packet && packet->getHeader() == MessagePacket::headerString)
-        messagePacket = reinterpret_cast<MessagePacket*>(packet);
-
-    if (!messagePacket || messagePacket->getReceiverId() != currentUser.getId())
-        return nullptr;
-
-    if (users.find(messagePacket->getSenderId()) == users.end())
-        refreshUsers();
-
-    if (users.find(messagePacket->getSenderId()) == users.end()) //TODO: maybe extract to utility function
-        return nullptr;
-
-    return new Message(users[messagePacket->getSenderId()], users[messagePacket->getReceiverId()], messagePacket->getMessage());
+    return lastMessage;
 }
 
 void ChatAPI::update() {
-    if (mediator)
-        mediator->notify(this, "newmessage");
+    std::string raw = socket->read();
+    Packet *packet = PacketFactory::decode(raw);
+    if (packet) {
+        if (packet->getHeader() == SignXResponse::headerString)
+            handleSignXResponse(reinterpret_cast<SignXResponse*>(packet));
+        else if (packet->getHeader() == MessagePacket::headerString) {
+            handleMessagePacket(reinterpret_cast<MessagePacket *>(packet));
+            mediator->notify(this, "newmessage");
+        }
+        else if (packet->getHeader() == UserListResponse::headerString)
+            handleUserListResponse(reinterpret_cast<UserListResponse*>(packet));
+    }
 }
+
+void ChatAPI::handleSignXResponse(SignXResponse *response) {
+    if (response->isSuccess()){
+        currentUser.setId(response->getUniqueId());
+    }
+    mediator->notify(this, "signxresponse");
+}
+
+void ChatAPI::handleMessagePacket(MessagePacket *packet) {
+    if (packet->getReceiverId() == currentUser.getId()){
+        if (users.find(packet->getSenderId()) == users.end())
+            refreshUsers();
+
+        if (users.find(packet->getSenderId()) == users.end()) //TODO: maybe extract to utility function
+            return;
+
+        lastMessage = new Message(users[packet->getSenderId()], users[packet->getReceiverId()], packet->getMessage());
+    }
+}
+
+void ChatAPI::handleUserListResponse(UserListResponse *packet) {
+    for (const auto& user : packet->getUsers()){
+        users[user.getId()] = user;
+    }
+}
+
 
 bool ChatAPI::refreshUsers() {
     Packet* packet = new UserList();
     socket->write(packet->encode());
     delete packet;
-    std::string raw = socket->syncread();
-    packet = PacketFactory::decode(raw);
-    UserListResponse *response = nullptr;
-    if (packet && packet->getHeader() == UserListResponse::headerString)
-        response = reinterpret_cast<UserListResponse*>(packet);
-
-    if (response){
-        for (const auto& user : response->getUsers()){
-            users[user.getId()] = user;
-        }
-        return true;
-    }
-    delete packet;
-    return false;
 }
 
 std::list<User> ChatAPI::getUsers() const {
@@ -130,6 +104,10 @@ std::list<User> ChatAPI::getUsers() const {
         userList.push_back(user.second);
     }
     return userList;
+}
+
+const User &ChatAPI::getCurrentUser() const {
+    return currentUser;
 }
 
 
