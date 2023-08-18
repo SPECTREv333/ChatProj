@@ -15,11 +15,13 @@
 class ChatApp : public QMainWindow, public Mediator {
 Q_OBJECT
 public:
-    ChatApp(ChatAPI *chatAPI, ChatRegister *chatRegister, QWidget *parent = nullptr);
+    ChatApp(QWidget *parent = nullptr);
 
     void notify(Component *sender, const std::string& event) override;
 
 private:
+    void connectDialog();
+
     ChatAPI *chatAPI;
     ChatRegister *chatRegister;
     ChatRegisterController *chatRegisterController;

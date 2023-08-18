@@ -34,7 +34,7 @@ public:
 
     const std::string read();
 
-    void write(const std::string &message);
+    bool write(const std::string &message);
 
     void addObserver(Observer *observer) override;
 

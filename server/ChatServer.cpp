@@ -51,7 +51,10 @@ void ChatServer::handleSignIn(ObservableSocket *sender, SignIn *packet) {
 void ChatServer::handleSendMessage(ObservableSocket *sender, MessagePacket *packet) {
     UserEntry *user = usersDatabase.getUserById(packet->getReceiverId());
     if (user) {
-        user->getSocket()->write(packet->encode());
+        if(user->getSocket())
+            user->getSocket()->write(packet->encode());
+        else if (sender)
+            sender->write(MessagePacket(packet->getReceiverId(), packet->getSenderId(), "User is offline").encode());
     }
 }
 

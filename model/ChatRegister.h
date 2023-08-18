@@ -10,9 +10,11 @@
 
 class ChatRegister : public Subject {
 public:
+    explicit ChatRegister() = default;
+
     explicit ChatRegister(const User& currentUser) : currentUser(currentUser) {};
 
-    ~ChatRegister();
+    ~ChatRegister() override;
 
     void createChat(const User &remoteUser);
 

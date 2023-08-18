@@ -20,7 +20,9 @@
 // facade for client side
 class ChatAPI : public Component, public Observer {
 public:
-    ChatAPI();
+    explicit ChatAPI(const std::string& address = "127.0.0.1", int port = 6666);
+
+    ~ChatAPI() override;
 
     void signUp(const std::string &nickname, const std::string &password);
 

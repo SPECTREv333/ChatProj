@@ -16,9 +16,14 @@
 
 //TODO: signX methods code duplication, refactor if possible
 
-ChatAPI::ChatAPI() {
-    socket = new SimpleSocket();
+ChatAPI::ChatAPI(const std::string& address, int port) {
+    socket = new SimpleSocket(address, port);
     socket->addObserver(this);
+    lastMessage = nullptr;
+}
+
+ChatAPI::~ChatAPI() {
+    delete socket;
 }
 
 void ChatAPI::signUp(const std::string &nickname, const std::string &password) {

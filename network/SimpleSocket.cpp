@@ -4,8 +4,8 @@
 
 #include "SimpleSocket.h"
 
-SimpleSocket::SimpleSocket() {
-    socket = new Socket("127.0.0.1", 6666); //TODO: make this configurable
+SimpleSocket::SimpleSocket(const std::string& address, int port) {
+    socket = new Socket(address, port);
     socket->addObserver(this);
 }
 

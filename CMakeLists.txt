@@ -43,7 +43,9 @@ set(SOURCE_FILES protocol/Packet.h protocol/PacketFactory.cpp protocol/PacketFac
         gui/ChatController.cpp
         gui/ChatController.h)
 
-add_executable(ChatProj main.cpp ${SOURCE_FILES})
+add_executable(ChatProj main.cpp ${SOURCE_FILES}
+        client/SignXDialog.cpp
+        client/SignXDialog.h)
 
 add_executable(ChatServer server/main.cpp ${SOURCE_FILES})
 

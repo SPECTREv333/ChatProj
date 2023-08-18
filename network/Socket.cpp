@@ -52,9 +52,13 @@ const std::string Socket::read() {
     return messagestr;
 }
 
-void Socket::write(const std::string &message) {
+bool Socket::write(const std::string &message) {
+    if (!socket || !socket->isOpen()){
+        return false;
+    }
     socket->write(QString::fromStdString(message).toUtf8());
     socket->flush();
+    return true;
 }
 
 void Socket::displayError() {

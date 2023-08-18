@@ -17,7 +17,7 @@
 
 class SimpleSocket : public ObservableSocket, public Observer {
 public:
-    SimpleSocket();
+    SimpleSocket(const std::string& address, int port);
 
     explicit SimpleSocket(Socket *socket);
 
