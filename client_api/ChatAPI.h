@@ -34,7 +34,7 @@ public:
 
     Message *receiveMessage();
 
-    bool refreshUsers();
+    void refreshUsers();
 
     const User &getCurrentUser() const;
 

@@ -34,12 +34,12 @@ set(SOURCE_FILES protocol/Packet.h protocol/PacketFactory.cpp protocol/PacketFac
         client/ChatApp.h
         gui/chatregisterview.cpp
         gui/chatregisterview.h
-        gui/chatregisterview.ui
+        gui/ChatRegisterView.ui
         gui/ChatRegisterController.cpp
         gui/ChatRegisterController.h
         gui/chatview.cpp
         gui/chatview.h
-        gui/chatview.ui
+        gui/ChatView.ui
         gui/ChatController.cpp
         gui/ChatController.h
         client/SignXDialog.cpp

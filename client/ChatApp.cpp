@@ -24,7 +24,6 @@ ChatApp::ChatApp(QWidget *parent) : QMainWindow(parent) {
     auto *signDialog = new SignXDialog(chatAPI, this);
     signDialog->exec();
 
-    setCentralWidget(chatRegisterView);
 
 }
 
@@ -36,6 +35,7 @@ void ChatApp::notify(Component *sender, const std::string &event) {
             chatRegister->setCurrentUser(chatAPI->getCurrentUser());
             chatRegisterController = new ChatRegisterController(chatRegister, chatAPI); //FIXME: dangling pointer
             chatRegisterView = new ChatRegisterView(chatRegister, chatRegisterController, this);
+            setCentralWidget(chatRegisterView);
             setWindowTitle("Hello, " + QString::fromStdString(chatRegister->getCurrentUser().getNickname()) + "!");
         } else if (event == "signInFailed"){
             chatRegister->setCurrentUser(User());
