@@ -6,6 +6,6 @@
 
 void ChatController::send(const std::string &message) {
     Message msg(model->getCurrentUser(), model->getRemoteUser(), message);
-    model->addMessage(&msg);
+    model->addMessage(msg);
     chatAPI->sendMessage(msg);
 }

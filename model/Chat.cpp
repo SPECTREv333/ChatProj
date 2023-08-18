@@ -4,8 +4,9 @@
 
 #include "Chat.h"
 
-void Chat::addMessage(Message *message) {
-    messages.push_back(message);
+void Chat::addMessage(Message &message) {
+    auto* msg = new Message(message);
+    messages.push_back(msg);
     notify();
 }
 

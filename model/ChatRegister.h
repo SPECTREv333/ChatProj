@@ -18,7 +18,7 @@ public:
 
     void createChat(const User &remoteUser);
 
-    void addMessage(Message *message);
+    void addMessage(Message &message);
 
     Chat &getChat(const User &remote) const;
 

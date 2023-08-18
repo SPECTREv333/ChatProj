@@ -54,7 +54,7 @@ void ChatServer::handleSendMessage(ObservableSocket *sender, MessagePacket *pack
         if(user->getSocket())
             user->getSocket()->write(packet->encode());
         else if (sender)
-            sender->write(MessagePacket(packet->getReceiverId(), packet->getSenderId(), "User is offline").encode());
+            sender->write(MessagePacket(packet->getSenderId(), packet->getSenderId(), "User is offline").encode());
     }
 }
 
@@ -65,8 +65,6 @@ void ChatServer::handleGetUserList(ObservableSocket *sender, UserList *packet) {
 
 ChatServer::ChatServer(int port) {
     socketServer = new SocketServer(port, this);
-    usersDatabase.registerUser("user1", "pass1", nullptr);
-    usersDatabase.registerUser("user2", "pass2", nullptr);
 }
 
 ChatServer::~ChatServer() {

@@ -31,7 +31,7 @@ ChatApp::ChatApp(QWidget *parent) : QMainWindow(parent) {
 void ChatApp::notify(Component *sender, const std::string &event) {
     if (sender == chatAPI){
         if (event == "newMessage"){
-            chatRegister->addMessage(chatAPI->receiveMessage());
+            chatRegister->addMessage(*chatAPI->receiveMessage());
         } else if (event == "signedIn"){
             chatRegister->setCurrentUser(chatAPI->getCurrentUser());
             chatRegisterController = new ChatRegisterController(chatRegister, chatAPI); //FIXME: dangling pointer

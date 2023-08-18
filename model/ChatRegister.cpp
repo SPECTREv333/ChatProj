@@ -10,8 +10,8 @@ void ChatRegister::createChat(const User &remoteUser) {
     notify();
 }
 
-void ChatRegister::addMessage(Message *message) {
-    auto chat = chats.find(message->getSender().getId());
+void ChatRegister::addMessage(Message &message) {
+    auto chat = chats.find(message.getSender().getId());
     if (chat != chats.end()) {
         chat->second->addMessage(message);
     }

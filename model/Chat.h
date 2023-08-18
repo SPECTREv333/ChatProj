@@ -17,7 +17,7 @@ public:
 
     Chat &operator=(const Chat &rhs) = delete;
 
-    void addMessage(Message *message);
+    void addMessage(Message &message);
 
     void addObserver(Observer *o) override;
 

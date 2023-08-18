@@ -15,6 +15,13 @@ ChatView::ChatView(Chat *model, ChatController *controller, QWidget *parent) : m
                                                                                QMainWindow(parent), ui(new Ui::ChatView) {
     ui->setupUi(this);
     model->addObserver(this);
+
+    for (auto &message : model->getMessages()) {
+
+        ui->textEdit->insertHtml(QString::fromStdString("<b>" + message->getSender().getNickname()
+                                                    + "</b>: " + message->getContent() + "<br>"));
+    }
+
     connect(ui->sendButton, SIGNAL(pressed()), this, SLOT(onSendPressed()));
     connect(ui->input, SIGNAL(returnPressed()), this, SLOT(onSendPressed()));
 }
