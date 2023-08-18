@@ -21,7 +21,7 @@ ChatApp::ChatApp(QWidget *parent) : QMainWindow(parent) {
     chatRegister = new ChatRegister();
 
     chatAPI->setMediator(this);
-    SignXDialog *signDialog = new SignXDialog(chatAPI, this);
+    auto *signDialog = new SignXDialog(chatAPI, this);
     signDialog->exec();
 
     setCentralWidget(chatRegisterView);
