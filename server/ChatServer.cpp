@@ -12,7 +12,7 @@ void ChatServer::notify(Component *sender, const std::string &event) {
     return; // TODO: handle disconnect
 }
 
-void ChatServer::notify(ObservableSocket *sender, const std::string &event) {
+void ChatServer::notify(EventSocket *sender, const std::string &event) {
     if (event == "newConnection") {
         std::cout << "new connection" << std::endl;
     } else if (event == "newMessage") {
@@ -32,7 +32,7 @@ void ChatServer::notify(ObservableSocket *sender, const std::string &event) {
     }
 }
 
-void ChatServer::handleSignUp(ObservableSocket *sender, SignUp *packet) {
+void ChatServer::handleSignUp(EventSocket *sender, SignUp *packet) {
     if (usersDatabase.registerUser(packet->getUsername(), packet->getPassword(), sender)) {
         sender->write(SignXResponse(usersDatabase.getUserByUsername(packet->getUsername())->getUser().getId(), true).encode());
     } else {
@@ -40,7 +40,7 @@ void ChatServer::handleSignUp(ObservableSocket *sender, SignUp *packet) {
     }
 }
 
-void ChatServer::handleSignIn(ObservableSocket *sender, SignIn *packet) {
+void ChatServer::handleSignIn(EventSocket *sender, SignIn *packet) {
     if (usersDatabase.authenticate(packet->getUsername(), packet->getPassword(), sender)) {
         sender->write(SignXResponse(usersDatabase.getUserByUsername(packet->getUsername())->getUser().getId(), true).encode());
     } else {
@@ -48,7 +48,7 @@ void ChatServer::handleSignIn(ObservableSocket *sender, SignIn *packet) {
     }
 }
 
-void ChatServer::handleSendMessage(ObservableSocket *sender, MessagePacket *packet) {
+void ChatServer::handleSendMessage(EventSocket *sender, MessagePacket *packet) {
     UserEntry *user = usersDatabase.getUserById(packet->getReceiverId());
     if (user) {
         if(user->getSocket())
@@ -58,7 +58,7 @@ void ChatServer::handleSendMessage(ObservableSocket *sender, MessagePacket *pack
     }
 }
 
-void ChatServer::handleGetUserList(ObservableSocket *sender, UserList *packet) {
+void ChatServer::handleGetUserList(EventSocket *sender, UserList *packet) {
     std::vector<User> users = usersDatabase.getUserList();
     sender->write(UserListResponse(users).encode());
 }

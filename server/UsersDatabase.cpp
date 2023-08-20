@@ -4,7 +4,7 @@
 
 #include "UsersDatabase.h"
 
-bool UsersDatabase::authenticate(const std::string &username, const std::string &password, ObservableSocket *socket) {
+bool UsersDatabase::authenticate(const std::string &username, const std::string &password, EventSocket *socket) {
     auto it = usernameMap.find(username);
     if (it != usernameMap.end() && it->second->getPassword() == password) {
         it->second->setSocket(socket);
@@ -13,7 +13,7 @@ bool UsersDatabase::authenticate(const std::string &username, const std::string 
     return false;
 }
 
-bool UsersDatabase::registerUser(const std::string &username, const std::string &password, ObservableSocket *socket) {
+bool UsersDatabase::registerUser(const std::string &username, const std::string &password, EventSocket *socket) {
     auto it = usernameMap.find(username);
     if (it == usernameMap.end()) {
         User user(++idCounter, username);

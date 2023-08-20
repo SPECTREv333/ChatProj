@@ -17,11 +17,10 @@ ChatApp::ChatApp(QWidget *parent) : QMainWindow(parent) {
         connectDialog();
     } catch (const std::runtime_error& e){
         QMessageBox::critical(this, "Error", e.what());
-        exit(0);
     }
 
     if (chatAPI == nullptr)
-        exit(0);
+        close();
 
     chatRegister = new ChatRegister();
 
@@ -49,6 +48,9 @@ void ChatApp::notify(Component *sender, const std::string &event) {
             msgBox.setIcon(QMessageBox::Critical);
             msgBox.setText("Sign in failed");
             msgBox.exec();
+        } else if (event == "disconnect"){
+            QMessageBox::information(this, "Disconnected", "Connection lost");
+            close();
         }
     }
 }
@@ -68,8 +70,10 @@ void ChatApp::connectDialog() {
     connect(buttonBox, SIGNAL(accepted()), dialog, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), dialog, SLOT(reject()));
     if (dialog->exec() == QDialog::Accepted){
-        if (addressEdit->text().isEmpty() || portEdit->text().isEmpty())
-            QMessageBox::critical(this, "Error", "Address and port must be specified");
+        if (addressEdit->text().isEmpty() || portEdit->text().isEmpty()){
+            QMessageBox::warning(this, "Error", "Address and port must be specified");
+            close();
+        }
         delete chatAPI;
         chatAPI = new ChatAPI(addressEdit->text().toStdString(), portEdit->text().toInt());
     }

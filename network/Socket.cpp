@@ -25,7 +25,7 @@ Socket::Socket(const std::string& serverAddress, int serverPort, QObject *parent
 
 void Socket::onDisconnect() {
     socket->deleteLater();
-    socket = nullptr;
+    mediator->notify(this, "disconnect");
     qInfo() << "Socket disconected";
 }
 
@@ -40,8 +40,8 @@ void Socket::displayState() {
 }
 
 void Socket::newMessage(){
+    mediator->notify(this, "message");
     qInfo() << "New message";
-    notify();
 }
 
 const std::string Socket::read() {
@@ -70,22 +70,8 @@ const std::string Socket::syncread() {
     return messagestr;
 }
 
-const bool Socket::isConnected() const {
+bool Socket::isConnected() const {
     return socket->isOpen();
-}
-
-void Socket::addObserver(Observer *observer) {
-    observers.push_back(observer);
-}
-
-void Socket::removeObserver(Observer *observer) {
-    observers.remove(observer);
-}
-
-void Socket::notify() {
-    for (auto observer : observers) {
-        observer->update();
-    }
 }
 
 const QTcpSocket *Socket::getSocket() const {

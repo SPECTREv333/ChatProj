@@ -4,9 +4,9 @@
 
 #include "UserEntry.h"
 
-UserEntry::UserEntry(const User &user, const std::string &password, ObservableSocket *socket) : user(user),
-                                                                                                password(password),
-                                                                                                socket(socket) {}
+UserEntry::UserEntry(const User &user, const std::string &password, EventSocket *socket) : user(user),
+                                                                                           password(password),
+                                                                                           socket(socket) {}
 
 const User &UserEntry::getUser() const {
     return user;
@@ -24,11 +24,11 @@ void UserEntry::setPassword(const std::string &password) {
     UserEntry::password = password;
 }
 
-ObservableSocket *UserEntry::getSocket() const {
+EventSocket *UserEntry::getSocket() const {
     return socket;
 }
 
-void UserEntry::setSocket(ObservableSocket *socket) {
+void UserEntry::setSocket(EventSocket *socket) {
     if (this->socket != nullptr)
         delete this->socket;
     UserEntry::socket = socket;

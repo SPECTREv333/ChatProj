@@ -6,7 +6,7 @@
 #define CHATPROJ_EVENTSOCKETSERVER_H
 
 #include "Mediator.h"
-#include "ObservableSocket.h"
+#include "EventSocket.h"
 
 class EventSocketServer : public Mediator {
 public:
@@ -14,7 +14,7 @@ public:
 
     void notify(Component *sender, const std::string &event) override = 0;
 
-    virtual void notify(ObservableSocket *sender, const std::string &event) = 0;
+    virtual void notify(EventSocket *sender, const std::string &event) = 0;
 
 };
 

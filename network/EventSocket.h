@@ -2,22 +2,22 @@
 // Created by Leonardo on 13/08/23.
 //
 
-#ifndef CHATPROJ_OBSERVABLESOCKET_H
-#define CHATPROJ_OBSERVABLESOCKET_H
+#ifndef CHATPROJ_EVENTSOCKET_H
+#define CHATPROJ_EVENTSOCKET_H
 
-#include "Subject.h"
+#include "Mediator.h"
 #include <string>
 
-// abstract class ObservableSocket
+// abstract class EventSocket
 // has only 2 pure virtual methods read and write
 // it is a Subject, when its readable it notifies its observers
-class ObservableSocket : public Subject {
+class EventSocket : public Component {
 public:
-    virtual ~ObservableSocket() = default;
+    virtual ~EventSocket() = default;
     virtual const std::string read() = 0;
     virtual void write(const std::string &text) = 0;
     virtual const std::string syncread() = 0;
 };
 
 
-#endif //CHATPROJ_OBSERVABLESOCKET_H
+#endif //CHATPROJ_EVENTSOCKET_H

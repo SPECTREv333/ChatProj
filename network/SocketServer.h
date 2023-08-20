@@ -30,7 +30,7 @@ public slots:
 private:
     EventSocketServer *eventSocketServer;
     QTcpServer *server;
-    QMap<QTcpSocket *, ObservableSocket*> clients;
+    QMap<QTcpSocket *, EventSocket*> clients;
 };
 
 

@@ -13,9 +13,9 @@ class UsersDatabase {
 public:
     UsersDatabase() = default;
 
-    bool authenticate(const std::string &username, const std::string &password, ObservableSocket *socket);
+    bool authenticate(const std::string &username, const std::string &password, EventSocket *socket);
 
-    bool registerUser(const std::string &username, const std::string &password, ObservableSocket *socket);
+    bool registerUser(const std::string &username, const std::string &password, EventSocket *socket);
 
     UserEntry* getUserById(int id);
 
