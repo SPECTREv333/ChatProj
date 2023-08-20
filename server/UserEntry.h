@@ -7,11 +7,11 @@
 
 
 #include "../model/User.h"
-#include "../network/ObservableSocket.h"
+#include "../network/EventSocket.h"
 
 class UserEntry {
 public:
-    UserEntry(const User &user, const std::string &password, ObservableSocket *socket);
+    UserEntry(const User &user, const std::string &password, EventSocket *socket);
 
     const User &getUser() const;
 
@@ -21,14 +21,14 @@ public:
 
     void setPassword(const std::string &password);
 
-    ObservableSocket *getSocket() const;
+    EventSocket *getSocket() const;
 
-    void setSocket(ObservableSocket *socket);
+    void setSocket(EventSocket *socket);
 
 private:
     User user;
     std::string password;
-    ObservableSocket *socket;
+    EventSocket *socket;
 
 };
 

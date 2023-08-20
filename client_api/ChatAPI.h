@@ -10,15 +10,15 @@
 #include "Mediator.h"
 #include "../model/User.h"
 #include "../model/Message.h"
-#include "../network/ObservableSocket.h"
+#include "../network/EventSocket.h"
 #include "concrete_packets/SignXResponse.h"
 #include "concrete_packets/MessagePacket.h"
 #include "concrete_packets/UserListResponse.h"
 
-//TODO: use ObservableSocket to do comunication, MAKE SURE SERVER WORKS FIRST!!
+//TODO: use EventSocket to do comunication, MAKE SURE SERVER WORKS FIRST!!
 
 // facade for client side
-class ChatAPI : public Component, public Observer {
+class ChatAPI : public Component, public Mediator {
 public:
     explicit ChatAPI(const std::string& address = "127.0.0.1", int port = 6666);
 
@@ -40,19 +40,19 @@ public:
 
     std::list<User> getUsers() const;
 
-    void update() override;
+    void notify(Component *sender, const std::string& event) override;
 
 private:
 
+    void newPacket();
     void handleSignXResponse(SignXResponse *response);
     void handleMessagePacket(MessagePacket *packet);
     void handleUserListResponse(UserListResponse *packet);
 
     User currentUser;
-    ObservableSocket *socket;
+    EventSocket *socket;
     std::map<int, User> users;
     Message *lastMessage;
-
 
 };
 

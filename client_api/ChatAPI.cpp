@@ -18,7 +18,7 @@
 
 ChatAPI::ChatAPI(const std::string& address, int port) {
     socket = new Socket(address, port);
-    socket->addObserver(this);
+    socket->setMediator(this);
     lastMessage = nullptr;
 }
 
@@ -57,7 +57,7 @@ Message *ChatAPI::receiveMessage() {
     return lastMessage;
 }
 
-void ChatAPI::update() {
+void ChatAPI::newPacket() {
     std::string raw = socket->read();
     Packet *packet = PacketFactory::decode(raw);
     if (packet) {
@@ -118,6 +118,16 @@ std::list<User> ChatAPI::getUsers() const {
 
 const User &ChatAPI::getCurrentUser() const {
     return currentUser;
+}
+
+void ChatAPI::notify(Component *sender, const std::string &event) {
+    if (socket == sender){
+        if (event == "message"){
+            newPacket();
+        } else if (event == "disconnect"){
+            mediator->notify(this, event);
+        }
+    }
 }
 
 

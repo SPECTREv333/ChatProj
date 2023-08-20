@@ -20,8 +20,17 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QTextEdit" name="textEdit">
+      <property name="undoRedoEnabled">
+       <bool>false</bool>
+      </property>
       <property name="readOnly">
        <bool>true</bool>
+      </property>
+      <property name="cursorWidth">
+       <number>0</number>
+      </property>
+      <property name="textInteractionFlags">
+       <set>Qt::NoTextInteraction</set>
       </property>
      </widget>
     </item>

@@ -22,14 +22,14 @@ public:
 
     void notify(Component *sender, const std::string &event) override;
 
-    void notify(ObservableSocket *sender, const std::string &event) override;
+    void notify(EventSocket *sender, const std::string &event) override;
 
 private:
-    void handleSignUp(ObservableSocket *sender, SignUp *packet);
-    void handleSignIn(ObservableSocket *sender, SignIn *packet);
-    //void handleSignOut(ObservableSocket *sender, SignOut *packet); //TODO: implement
-    void handleSendMessage(ObservableSocket *sender, MessagePacket *packet);
-    void handleGetUserList(ObservableSocket *sender, UserList *packet);
+    void handleSignUp(EventSocket *sender, SignUp *packet);
+    void handleSignIn(EventSocket *sender, SignIn *packet);
+    //void handleSignOut(EventSocket *sender, SignOut *packet); //TODO: implement
+    void handleSendMessage(EventSocket *sender, MessagePacket *packet);
+    void handleGetUserList(EventSocket *sender, UserList *packet);
 
     SocketServer* socketServer;
     UsersDatabase usersDatabase;

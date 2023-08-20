@@ -24,7 +24,7 @@ void SocketServer::newMessage() {
 }
 
 void SocketServer::addConnection(QTcpSocket *socket) {
-    ObservableSocket* connection = new Socket(socket);
+    EventSocket* connection = new Socket(socket);
 
     clients.insert(socket, connection);
 
