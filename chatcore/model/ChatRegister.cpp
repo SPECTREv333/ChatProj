@@ -14,7 +14,11 @@ void ChatRegister::addMessage(Message &message) {
     auto chat = chats.find(message.getSender().getId());
     if (chat != chats.end()) {
         chat->second->addMessage(message);
+    } else {
+        createChat(message.getSender());
+        addMessage(message);
     }
+    notify();
 }
 
 ChatRegister::~ChatRegister() {
