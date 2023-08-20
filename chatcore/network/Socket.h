@@ -35,7 +35,7 @@ public:
 
     const std::string read() override;
 
-    void write(const std::string &message);
+    void write(const std::string &message) override;
 
 public slots:
 
