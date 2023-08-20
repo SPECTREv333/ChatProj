@@ -13,7 +13,12 @@ ChatApp::ChatApp(QWidget *parent) : QMainWindow(parent) {
     chatAPI = nullptr;
     setWindowTitle("ChatApp");
 
-    connectDialog();
+    try {
+        connectDialog();
+    } catch (const std::runtime_error& e){
+        QMessageBox::critical(this, "Error", e.what());
+        exit(0);
+    }
 
     if (chatAPI == nullptr)
         exit(0);

@@ -10,10 +10,11 @@
 #include <QTcpSocket>
 #include "Subject.h"
 #include "Mediator.h"
+#include "ObservableSocket.h"
 
 //TODO: add a connect(address, port) method
 
-class Socket : public QObject, public Subject {
+class Socket : public QObject, public ObservableSocket {
 Q_OBJECT
 
 public:
@@ -30,11 +31,11 @@ public:
 
     void setSocket(QTcpSocket *socket);
 
-    const std::string syncread();
+    const std::string syncread() override;
 
-    const std::string read();
+    const std::string read() override;
 
-    bool write(const std::string &message);
+    void write(const std::string &message);
 
     void addObserver(Observer *observer) override;
 

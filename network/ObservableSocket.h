@@ -14,9 +14,9 @@
 class ObservableSocket : public Subject {
 public:
     virtual ~ObservableSocket() = default;
-    virtual std::string read() = 0;
+    virtual const std::string read() = 0;
     virtual void write(const std::string &text) = 0;
-    virtual std::string syncread() = 0;
+    virtual const std::string syncread() = 0;
 };
 
 
