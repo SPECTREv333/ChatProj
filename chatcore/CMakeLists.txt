@@ -36,7 +36,7 @@ set(SOURCE_FILES model/Chat.cpp
         protocol/concrete_packets/UserListResponse.h
 )
 
-add_library(ChatLib ${SOURCE_FILES})
+add_library(ChatLib STATIC ${SOURCE_FILES})
 
 target_link_libraries(ChatLib
         Qt::Core
