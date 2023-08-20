@@ -6,8 +6,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-
-include_directories(patterns protocol)
+include_directories(chatcore/protocol chatcore/network chatcore/model patterns)
 
 find_package(Qt6 COMPONENTS
         Core
@@ -16,44 +15,50 @@ find_package(Qt6 COMPONENTS
         Network
         REQUIRED)
 
-set(SOURCE_FILES protocol/Packet.h protocol/PacketFactory.cpp protocol/PacketFactory.h model/User.cpp model/User.h protocol/concrete_packets/SignUp.h protocol/concrete_packets/SignXResponse.h patterns/Mediator.h client_api/ChatAPI.cpp client_api/ChatAPI.h model/Message.h network/EventSocket.h patterns/Subject.h patterns/Observer.h network/Socket.cpp protocol/concrete_packets/SignIn.h protocol/concrete_packets/SignOut.h protocol/concrete_packets/UserList.h protocol/concrete_packets/UserListResponse.h protocol/concrete_packets/MessagePacket.h
-        network/EventSocketServer.h
-        network/SocketServer.h
-        network/SocketServer.cpp
-        server/ChatServer.cpp
-        server/ChatServer.h
-        server/UsersDatabase.cpp
-        server/UsersDatabase.h
-        server/UserEntry.cpp
-        server/UserEntry.h
-        model/Chat.cpp
-        model/Chat.h
-        model/ChatRegister.cpp
-        model/ChatRegister.h
+add_subdirectory(chatcore)
+
+set(CLIENT_SOURCES
         client/ChatApp.cpp
         client/ChatApp.h
-        gui/chatregisterview.cpp
-        gui/chatregisterview.h
-        gui/ChatRegisterView.ui
-        gui/ChatRegisterController.cpp
-        gui/ChatRegisterController.h
-        gui/chatview.cpp
-        gui/chatview.h
-        gui/ChatView.ui
+        client/SignXDialog.cpp
+        client/SignXDialog.h
+        client_api/ChatAPI.cpp
+        client_api/ChatAPI.h
         gui/ChatController.cpp
         gui/ChatController.h
-        client/SignXDialog.cpp
-        client/SignXDialog.h)
+        gui/ChatRegisterController.cpp
+        gui/ChatRegisterController.h
+        gui/chatregisterview.cpp
+        gui/chatregisterview.h
+        gui/chatregisterview.ui
+        gui/chatview.cpp
+        gui/chatview.h
+        gui/chatview.ui
+        patterns/Mediator.h
+        patterns/Observer.h
+        patterns/Subject.h
+)
 
-add_executable(ChatProj main.cpp ${SOURCE_FILES})
+set(SERVER_SOURCES
+        server/ChatServer.cpp
+        server/ChatServer.h
+        server/UserEntry.cpp
+        server/UserEntry.h
+        server/UsersDatabase.cpp
+        server/UsersDatabase.h
+        patterns/Mediator.h
+        patterns/Observer.h
+        patterns/Subject.h
+)
 
-add_executable(ChatServer server/main.cpp ${SOURCE_FILES})
+add_executable(ChatProj main.cpp ${CLIENT_SOURCES})
+
+add_executable(ChatServer server/main.cpp ${SERVER_SOURCES})
 
 target_link_libraries(ChatServer
         Qt::Core
-        Qt::Gui
-        Qt::Widgets
         Qt::Network
+        ChatLib
 )
 
 target_link_libraries(ChatProj
@@ -61,5 +66,6 @@ target_link_libraries(ChatProj
         Qt::Gui
         Qt::Widgets
         Qt::Network
+        ChatLib
         )
 
