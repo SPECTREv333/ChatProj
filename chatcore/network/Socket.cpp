@@ -46,7 +46,8 @@ void Socket::newMessage(){
 
 const std::string Socket::read() {
     QByteArray buffer;
-    buffer = socket->readAll();
+    buffer = socket->readLine();
+    buffer.chop(1);
     std::string messagestr = buffer.toStdString();
     qInfo() << messagestr;
     return messagestr;
@@ -54,6 +55,7 @@ const std::string Socket::read() {
 
 void Socket::write(const std::string &message) {
     socket->write(QString::fromStdString(message).toUtf8());
+    socket->write("\n");
     socket->flush();
 }
 
