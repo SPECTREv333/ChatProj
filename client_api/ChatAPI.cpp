@@ -3,7 +3,6 @@
 //
 
 #include "ChatAPI.h"
-#include "../network/SimpleSocket.h"
 #include "Packet.h"
 #include "concrete_packets/SignUp.h"
 #include "concrete_packets/SignXResponse.h"
@@ -13,11 +12,12 @@
 #include "concrete_packets/MessagePacket.h"
 #include "concrete_packets/UserList.h"
 #include "concrete_packets/UserListResponse.h"
+#include "../network/Socket.h"
 
 //TODO: signX methods code duplication, refactor if possible
 
 ChatAPI::ChatAPI(const std::string& address, int port) {
-    socket = new SimpleSocket(address, port);
+    socket = new Socket(address, port);
     socket->addObserver(this);
     lastMessage = nullptr;
 }

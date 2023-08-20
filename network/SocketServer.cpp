@@ -4,7 +4,6 @@
 
 #include "SocketServer.h"
 #include "Socket.h"
-#include "SimpleSocket.h"
 
 void SocketServer::newConnection() {
     while (server->hasPendingConnections()) {
@@ -25,7 +24,7 @@ void SocketServer::newMessage() {
 }
 
 void SocketServer::addConnection(QTcpSocket *socket) {
-    ObservableSocket* connection = new SimpleSocket(new Socket(socket));
+    ObservableSocket* connection = new Socket(socket);
 
     clients.insert(socket, connection);
 
