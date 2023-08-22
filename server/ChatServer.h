@@ -6,7 +6,7 @@
 #define CHATPROJ_CHATSERVER_H
 
 #include "UsersDatabase.h"
-#include "../network/EventSocketServer.h"
+#include "../network/EventSocketReceiver.h"
 #include "concrete_packets/SignUp.h"
 #include "concrete_packets/SignIn.h"
 #include "concrete_packets/SignOut.h"
@@ -14,7 +14,7 @@
 #include "concrete_packets/UserList.h"
 #include "../network/SocketServer.h"
 
-class ChatServer : public EventSocketServer {
+class ChatServer : public EventSocketReceiver {
 public:
     explicit ChatServer(int port);
 

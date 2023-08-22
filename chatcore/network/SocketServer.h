@@ -9,15 +9,19 @@
 #include <QTcpSocket>
 #include <QTcpServer>
 #include "Mediator.h"
+#include "EventSocketReceiver.h"
 #include "EventSocketServer.h"
+#include "Socket.h"
 
-class SocketServer : public QObject, public Component {
+class SocketServer : public QObject, public EventSocketServer {
 Q_OBJECT
 
 public:
-    SocketServer(int port, EventSocketServer* mediator);
+    explicit SocketServer(int port, EventSocketReceiver* mediator = nullptr);
 
     void addConnection(QTcpSocket *socket);
+
+    void setMediator(EventSocketReceiver *mediator) override;
 
 public slots:
 
@@ -28,7 +32,7 @@ public slots:
     void newConnection();
 
 private:
-    EventSocketServer *eventSocketServer;
+    EventSocketReceiver *eventSocketServer;
     QTcpServer *server;
     QMap<QTcpSocket *, EventSocket*> clients;
 };

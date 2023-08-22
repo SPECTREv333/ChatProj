@@ -18,8 +18,9 @@ set(SOURCE_FILES model/Chat.cpp
         model/Message.h
         model/User.cpp
         model/User.h
-        network/EventSocket.h
         network/EventSocketServer.h
+        network/EventSocket.h
+        network/EventSocketReceiver.h
         network/Socket.cpp
         network/Socket.h
         network/SocketServer.cpp

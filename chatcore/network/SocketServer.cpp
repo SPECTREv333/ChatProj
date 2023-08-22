@@ -14,13 +14,13 @@ void SocketServer::newConnection() {
 
 void SocketServer::onDisconnect() {
     auto *socket = reinterpret_cast<QTcpSocket *>(sender());
-    eventSocketServer->notify(this, "disconnected");
+    if (eventSocketServer) eventSocketServer->notify(this, "disconnected");
     clients.remove(socket);
 }
 
 void SocketServer::newMessage() {
     auto *socket = reinterpret_cast<QTcpSocket *>(sender());
-    eventSocketServer->notify(clients[socket], "newMessage");
+    if (eventSocketServer) eventSocketServer->notify(clients[socket], "newMessage");
 }
 
 void SocketServer::addConnection(QTcpSocket *socket) {
@@ -31,10 +31,10 @@ void SocketServer::addConnection(QTcpSocket *socket) {
     connect(socket, &QTcpSocket::readyRead, this, &SocketServer::newMessage);
     connect(socket, &QTcpSocket::disconnected, this, &SocketServer::onDisconnect);
 
-    eventSocketServer->notify(connection, "newConnection");
+    if (eventSocketServer) eventSocketServer->notify(connection, "newConnection");
 }
 
-SocketServer::SocketServer(int port, EventSocketServer *mediator) {
+SocketServer::SocketServer(int port, EventSocketReceiver *mediator) {
     server = new QTcpServer(this);
     eventSocketServer = mediator;
 
@@ -42,6 +42,14 @@ SocketServer::SocketServer(int port, EventSocketServer *mediator) {
         connect(server, &QTcpServer::newConnection, this, &SocketServer::newConnection);
     }
 }
+
+void SocketServer::setMediator(EventSocketReceiver *mediator) {
+    eventSocketServer = mediator;
+}
+
+
+
+
 
 
 
