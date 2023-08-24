@@ -14,16 +14,18 @@
 
 //TODO: add a connect(address, port) method
 
-class Socket : public QObject, public EventSocket {
+// This also was all along an adapter for QTcpSocket
+
+class QTcpSocketAdapter : public QObject, public EventSocket {
 Q_OBJECT
 
 public:
-    explicit Socket(const std::string &serverAddress = "localhost", int serverPort = 6666,
-                    QObject *parent = nullptr);
+    explicit QTcpSocketAdapter(const std::string &serverAddress = "localhost", int serverPort = 6666,
+                               QObject *parent = nullptr);
 
-    explicit Socket(QTcpSocket *socket, QObject *parent = nullptr);
+    explicit QTcpSocketAdapter(QTcpSocket *socket, QObject *parent = nullptr);
 
-    ~Socket() override;
+    ~QTcpSocketAdapter() override;
 
     bool isConnected() const;
 

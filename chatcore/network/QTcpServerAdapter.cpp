@@ -2,48 +2,48 @@
 // Created by Leonardo on 15/08/23.
 //
 
-#include "SocketServer.h"
-#include "Socket.h"
+#include "QTcpServerAdapter.h"
+#include "QTcpSocketAdapter.h"
 
-void SocketServer::newConnection() {
+void QTcpServerAdapter::newConnection() {
     while (server->hasPendingConnections()) {
         QTcpSocket* socket = server->nextPendingConnection();
         addConnection(socket);
     }
 }
 
-void SocketServer::onDisconnect() {
+void QTcpServerAdapter::onDisconnect() {
     auto *socket = reinterpret_cast<QTcpSocket *>(sender());
     if (eventSocketServer) eventSocketServer->notify(this, "disconnected");
     clients.remove(socket);
 }
 
-void SocketServer::newMessage() {
+void QTcpServerAdapter::newMessage() {
     auto *socket = reinterpret_cast<QTcpSocket *>(sender());
     if (eventSocketServer) eventSocketServer->notify(clients[socket], "newMessage");
 }
 
-void SocketServer::addConnection(QTcpSocket *socket) {
-    EventSocket* connection = new Socket(socket);
+void QTcpServerAdapter::addConnection(QTcpSocket *socket) {
+    EventSocket* connection = new QTcpSocketAdapter(socket);
 
     clients.insert(socket, connection);
 
-    connect(socket, &QTcpSocket::readyRead, this, &SocketServer::newMessage);
-    connect(socket, &QTcpSocket::disconnected, this, &SocketServer::onDisconnect);
+    connect(socket, &QTcpSocket::readyRead, this, &QTcpServerAdapter::newMessage);
+    connect(socket, &QTcpSocket::disconnected, this, &QTcpServerAdapter::onDisconnect);
 
     if (eventSocketServer) eventSocketServer->notify(connection, "newConnection");
 }
 
-SocketServer::SocketServer(int port, EventSocketReceiver *mediator) {
+QTcpServerAdapter::QTcpServerAdapter(int port, EventSocketReceiver *mediator) {
     server = new QTcpServer(this);
     eventSocketServer = mediator;
 
     if (server->listen(QHostAddress::Any, port)) {
-        connect(server, &QTcpServer::newConnection, this, &SocketServer::newConnection);
+        connect(server, &QTcpServer::newConnection, this, &QTcpServerAdapter::newConnection);
     }
 }
 
-void SocketServer::setMediator(EventSocketReceiver *mediator) {
+void QTcpServerAdapter::setMediator(EventSocketReceiver *mediator) {
     eventSocketServer = mediator;
 }
 

@@ -12,12 +12,12 @@
 #include "concrete_packets/MessagePacket.h"
 #include "concrete_packets/UserList.h"
 #include "concrete_packets/UserListResponse.h"
-#include "../network/Socket.h"
+#include "../network/QTcpSocketAdapter.h"
 
 //TODO: signX methods code duplication, refactor if possible
 
 ChatAPI::ChatAPI(const std::string& address, int port) {
-    socket = new Socket(address, port);
+    socket = new QTcpSocketAdapter(address, port); // TODO: use remove dependency
     socket->setMediator(this);
     lastMessage = nullptr;
 }

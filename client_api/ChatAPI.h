@@ -15,8 +15,6 @@
 #include "concrete_packets/MessagePacket.h"
 #include "concrete_packets/UserListResponse.h"
 
-//TODO: use EventSocket to do comunication, MAKE SURE SERVER WORKS FIRST!!
-
 // facade for client side
 class ChatAPI : public Component, public Mediator {
 public:

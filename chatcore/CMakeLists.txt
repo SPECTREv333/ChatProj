@@ -21,10 +21,10 @@ set(SOURCE_FILES model/Chat.cpp
         network/EventSocketServer.h
         network/EventSocket.h
         network/EventSocketReceiver.h
-        network/Socket.cpp
-        network/Socket.h
-        network/SocketServer.cpp
-        network/SocketServer.h
+        network/QTcpSocketAdapter.cpp
+        network/QTcpSocketAdapter.h
+        network/QTcpServerAdapter.cpp
+        network/QTcpServerAdapter.h
         protocol/Packet.h
         protocol/PacketFactory.cpp
         protocol/PacketFactory.h

@@ -12,7 +12,7 @@
 #include "concrete_packets/SignOut.h"
 #include "concrete_packets/MessagePacket.h"
 #include "concrete_packets/UserList.h"
-#include "../network/SocketServer.h"
+#include "../network/QTcpServerAdapter.h"
 
 class ChatServer : public EventSocketReceiver {
 public:
@@ -31,7 +31,7 @@ private:
     void handleSendMessage(EventSocket *sender, MessagePacket *packet);
     void handleGetUserList(EventSocket *sender, UserList *packet);
 
-    SocketServer* socketServer;
+    QTcpServerAdapter* socketServer;
     UsersDatabase usersDatabase;
 
 };

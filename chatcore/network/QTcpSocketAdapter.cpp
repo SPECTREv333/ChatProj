@@ -4,16 +4,16 @@
 
 #include <exception>
 #include <QTcpSocket>
-#include "Socket.h"
+#include "QTcpSocketAdapter.h"
 
 
-Socket::Socket(const std::string& serverAddress, int serverPort, QObject *parent) : QObject(parent) {
+QTcpSocketAdapter::QTcpSocketAdapter(const std::string& serverAddress, int serverPort, QObject *parent) : QObject(parent) {
     socket = new QTcpSocket(this);
 
-    connect(socket, &QTcpSocket::readyRead, this, &Socket::newMessage);
-    connect(socket, &QTcpSocket::disconnected, this, &Socket::onDisconnect);
-    connect(socket, &QTcpSocket::stateChanged, this, &Socket::displayState);
-    connect(socket, &QAbstractSocket::errorOccurred, this, &Socket::displayError);
+    connect(socket, &QTcpSocket::readyRead, this, &QTcpSocketAdapter::newMessage);
+    connect(socket, &QTcpSocket::disconnected, this, &QTcpSocketAdapter::onDisconnect);
+    connect(socket, &QTcpSocket::stateChanged, this, &QTcpSocketAdapter::displayState);
+    connect(socket, &QAbstractSocket::errorOccurred, this, &QTcpSocketAdapter::displayError);
 
     socket->connectToHost(QHostAddress(QString::fromStdString(serverAddress)), serverPort);
     if (socket->waitForConnected(3000)){
@@ -23,28 +23,28 @@ Socket::Socket(const std::string& serverAddress, int serverPort, QObject *parent
     }
 }
 
-void Socket::onDisconnect() {
+void QTcpSocketAdapter::onDisconnect() {
     socket->deleteLater();
     mediator->notify(this, "disconnect");
-    qInfo() << "Socket disconected";
+    qInfo() << "QTcpSocketAdapter disconected";
 }
 
-Socket::~Socket() {
+QTcpSocketAdapter::~QTcpSocketAdapter() {
     if(socket && socket->isOpen()){
         socket->close();
     }
 }
 
-void Socket::displayState() {
+void QTcpSocketAdapter::displayState() {
     qInfo() << "socket state changed to " << socket->state();
 }
 
-void Socket::newMessage(){
+void QTcpSocketAdapter::newMessage(){
     mediator->notify(this, "message");
     qInfo() << "New message";
 }
 
-const std::string Socket::read() {
+const std::string QTcpSocketAdapter::read() {
     QByteArray buffer;
     buffer = socket->readLine();
     buffer.chop(1);
@@ -53,17 +53,17 @@ const std::string Socket::read() {
     return messagestr;
 }
 
-void Socket::write(const std::string &message) {
+void QTcpSocketAdapter::write(const std::string &message) {
     socket->write(QString::fromStdString(message).toUtf8());
     socket->write("\n");
     socket->flush();
 }
 
-void Socket::displayError() {
+void QTcpSocketAdapter::displayError() {
     qInfo() << socket->errorString();
 }
 
-const std::string Socket::syncread() {
+const std::string QTcpSocketAdapter::syncread() {
     QByteArray buffer;
     socket->waitForReadyRead();
     buffer = socket->readAll();
@@ -72,19 +72,19 @@ const std::string Socket::syncread() {
     return messagestr;
 }
 
-bool Socket::isConnected() const {
+bool QTcpSocketAdapter::isConnected() const {
     return socket->isOpen();
 }
 
-const QTcpSocket *Socket::getSocket() const {
+const QTcpSocket *QTcpSocketAdapter::getSocket() const {
     return socket;
 }
 
-void Socket::setSocket(QTcpSocket *socket) {
+void QTcpSocketAdapter::setSocket(QTcpSocket *socket) {
     this->socket->deleteLater();
     this->socket = socket;
 }
 
-Socket::Socket(QTcpSocket *socket, QObject *parent) {
+QTcpSocketAdapter::QTcpSocketAdapter(QTcpSocket *socket, QObject *parent) {
     this->socket = socket;
 }

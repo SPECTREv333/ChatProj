@@ -64,7 +64,7 @@ void ChatServer::handleGetUserList(EventSocket *sender, UserList *packet) {
 }
 
 ChatServer::ChatServer(int port) {
-    socketServer = new SocketServer(port, this);
+    socketServer = new QTcpServerAdapter(port, this);
 }
 
 ChatServer::~ChatServer() {
