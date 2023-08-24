@@ -8,17 +8,17 @@
 #include <map>
 #include <list>
 #include "Mediator.h"
-#include "../model/User.h"
-#include "../model/Message.h"
-#include "../network/EventSocket.h"
+#include "User.h"
+#include "Message.h"
+#include "EventSocket.h"
 #include "concrete_packets/SignXResponse.h"
 #include "concrete_packets/MessagePacket.h"
 #include "concrete_packets/UserListResponse.h"
 
 // facade for client side
-class ChatAPI : public Component, public Mediator {
+class ChatAPI : public EventSocketReceiver, public Component {
 public:
-    explicit ChatAPI(const std::string& address = "127.0.0.1", int port = 6666);
+    explicit ChatAPI(EventSocket *socket);
 
     ~ChatAPI() override;
 
@@ -38,7 +38,9 @@ public:
 
     std::list<User> getUsers() const;
 
-    void notify(Component *sender, const std::string& event) override;
+    void newMessage() override;
+
+    void onDisconnect() override;
 
 private:
 

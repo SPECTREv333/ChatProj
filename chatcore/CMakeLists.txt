@@ -20,7 +20,7 @@ set(SOURCE_FILES model/Chat.cpp
         model/User.h
         network/EventSocketServer.h
         network/EventSocket.h
-        network/EventSocketReceiver.h
+        network/EventSocketServerReceiver.h
         network/QTcpSocketAdapter.cpp
         network/QTcpSocketAdapter.h
         network/QTcpServerAdapter.cpp
@@ -35,6 +35,7 @@ set(SOURCE_FILES model/Chat.cpp
         protocol/concrete_packets/SignXResponse.h
         protocol/concrete_packets/UserList.h
         protocol/concrete_packets/UserListResponse.h
+        network/EventSocketReceiver.h
 )
 
 add_library(ChatLib STATIC ${SOURCE_FILES})

@@ -6,13 +6,13 @@
 #define CHATPROJ_EVENTSOCKETSERVER_H
 
 #include "Mediator.h"
-#include "EventSocketReceiver.h"
+#include "EventSocketServerReceiver.h"
 
-class EventSocketServer : public Component {
+class EventSocketServer {
 public:
     virtual ~EventSocketServer() = default;
 
-    virtual void setMediator(EventSocketReceiver *mediator) = 0;
+    virtual void setReceiver(EventSocketServerReceiver *receiver) = 0;
 
 };
 

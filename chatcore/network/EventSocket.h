@@ -6,17 +6,19 @@
 #define CHATPROJ_EVENTSOCKET_H
 
 #include "Mediator.h"
+#include "EventSocketReceiver.h"
 #include <string>
 
 // abstract class EventSocket
 // has only 2 pure virtual methods read and write
 // it is a Subject, when its readable it notifies its observers
-class EventSocket : public Component {
+class EventSocket {
 public:
     virtual ~EventSocket() = default;
     virtual const std::string read() = 0;
     virtual void write(const std::string &text) = 0;
     virtual const std::string syncread() = 0;
+    virtual void setReceiver(EventSocketReceiver *receiver) = 0;
 };
 
 

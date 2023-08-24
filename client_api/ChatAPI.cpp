@@ -16,9 +16,8 @@
 
 //TODO: signX methods code duplication, refactor if possible
 
-ChatAPI::ChatAPI(const std::string& address, int port) {
-    socket = new QTcpSocketAdapter(address, port); // TODO: use remove dependency
-    socket->setMediator(this);
+ChatAPI::ChatAPI(EventSocket *socket) : socket(socket) {
+    socket->setReceiver(this);
     lastMessage = nullptr;
 }
 
@@ -120,14 +119,12 @@ const User &ChatAPI::getCurrentUser() const {
     return currentUser;
 }
 
-void ChatAPI::notify(Component *sender, const std::string &event) {
-    if (socket == sender){
-        if (event == "message"){
-            newPacket();
-        } else if (event == "disconnect"){
-            mediator->notify(this, event);
-        }
-    }
+void ChatAPI::newMessage() {
+    newPacket();
+}
+
+void ChatAPI::onDisconnect() {
+    mediator->notify(this, "disconnect");
 }
 
 

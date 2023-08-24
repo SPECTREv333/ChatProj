@@ -6,23 +6,25 @@
 #define CHATPROJ_CHATSERVER_H
 
 #include "UsersDatabase.h"
-#include "../network/EventSocketReceiver.h"
+#include "EventSocketServerReceiver.h"
 #include "concrete_packets/SignUp.h"
 #include "concrete_packets/SignIn.h"
 #include "concrete_packets/SignOut.h"
 #include "concrete_packets/MessagePacket.h"
 #include "concrete_packets/UserList.h"
-#include "../network/QTcpServerAdapter.h"
+#include "QTcpServerAdapter.h"
 
-class ChatServer : public EventSocketReceiver {
+class ChatServer : public EventSocketServerReceiver {
 public:
-    explicit ChatServer(int port);
+    explicit ChatServer(EventSocketServer *socketServer);
 
     ~ChatServer() override;
 
-    void notify(Component *sender, const std::string &event) override;
+    void newConnection(EventSocket *socket) override;
 
-    void notify(EventSocket *sender, const std::string &event) override;
+    void newMessage(EventSocket *socket) override;
+
+    void onDisconnect(EventSocket *socket) override;
 
 private:
     void handleSignUp(EventSocket *sender, SignUp *packet);
@@ -31,7 +33,7 @@ private:
     void handleSendMessage(EventSocket *sender, MessagePacket *packet);
     void handleGetUserList(EventSocket *sender, UserList *packet);
 
-    QTcpServerAdapter* socketServer;
+    EventSocketServer* socketServer;
     UsersDatabase usersDatabase;
 
 };

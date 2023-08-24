@@ -25,7 +25,7 @@ QTcpSocketAdapter::QTcpSocketAdapter(const std::string& serverAddress, int serve
 
 void QTcpSocketAdapter::onDisconnect() {
     socket->deleteLater();
-    mediator->notify(this, "disconnect");
+    receiver->onDisconnect();
     qInfo() << "QTcpSocketAdapter disconected";
 }
 
@@ -40,7 +40,7 @@ void QTcpSocketAdapter::displayState() {
 }
 
 void QTcpSocketAdapter::newMessage(){
-    mediator->notify(this, "message");
+    receiver->newMessage();
     qInfo() << "New message";
 }
 
@@ -87,4 +87,8 @@ void QTcpSocketAdapter::setSocket(QTcpSocket *socket) {
 
 QTcpSocketAdapter::QTcpSocketAdapter(QTcpSocket *socket, QObject *parent) {
     this->socket = socket;
+}
+
+void QTcpSocketAdapter::setReceiver(EventSocketReceiver *receiver) {
+    this->receiver = receiver;
 }

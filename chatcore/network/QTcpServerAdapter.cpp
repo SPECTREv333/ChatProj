@@ -14,13 +14,13 @@ void QTcpServerAdapter::newConnection() {
 
 void QTcpServerAdapter::onDisconnect() {
     auto *socket = reinterpret_cast<QTcpSocket *>(sender());
-    if (eventSocketServer) eventSocketServer->notify(this, "disconnected");
+    if (receiver) receiver->onDisconnect(clients[socket]);
     clients.remove(socket);
 }
 
 void QTcpServerAdapter::newMessage() {
     auto *socket = reinterpret_cast<QTcpSocket *>(sender());
-    if (eventSocketServer) eventSocketServer->notify(clients[socket], "newMessage");
+    if (receiver) receiver->newMessage(clients[socket]);
 }
 
 void QTcpServerAdapter::addConnection(QTcpSocket *socket) {
@@ -31,20 +31,20 @@ void QTcpServerAdapter::addConnection(QTcpSocket *socket) {
     connect(socket, &QTcpSocket::readyRead, this, &QTcpServerAdapter::newMessage);
     connect(socket, &QTcpSocket::disconnected, this, &QTcpServerAdapter::onDisconnect);
 
-    if (eventSocketServer) eventSocketServer->notify(connection, "newConnection");
+    if (receiver) receiver->newConnection(connection);
 }
 
-QTcpServerAdapter::QTcpServerAdapter(int port, EventSocketReceiver *mediator) {
+QTcpServerAdapter::QTcpServerAdapter(int port, EventSocketServerReceiver *receiver) {
     server = new QTcpServer(this);
-    eventSocketServer = mediator;
+    this->receiver = receiver;
 
     if (server->listen(QHostAddress::Any, port)) {
         connect(server, &QTcpServer::newConnection, this, &QTcpServerAdapter::newConnection);
     }
 }
 
-void QTcpServerAdapter::setMediator(EventSocketReceiver *mediator) {
-    eventSocketServer = mediator;
+void QTcpServerAdapter::setReceiver(EventSocketServerReceiver *receiver) {
+    this->receiver = receiver;
 }
 
 

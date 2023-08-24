@@ -37,7 +37,9 @@ public:
 
     const std::string read() override;
 
-    void write(const std::string &message);
+    void write(const std::string &message) override;
+
+    void setReceiver(EventSocketReceiver *receiver) override;
 
 public slots:
 
@@ -52,6 +54,7 @@ public slots:
 private:
     QTcpSocket *socket;
     std::list<Observer *> observers;
+    EventSocketReceiver* receiver;
 
 };
 

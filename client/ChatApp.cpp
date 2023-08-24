@@ -4,6 +4,7 @@
 
 #include "ChatApp.h"
 #include "SignXDialog.h"
+#include "QTcpSocketAdapter.h"
 #include <QDialog>
 #include <QFormLayout>
 #include <QMessageBox>
@@ -28,8 +29,6 @@ ChatApp::ChatApp(QWidget *parent) : QMainWindow(parent) {
     auto *signDialog = new SignXDialog(chatAPI, this);
     signDialog->exec();
 
-    setCentralWidget(chatRegisterView);
-
 }
 
 void ChatApp::notify(Component *sender, const std::string &event) {
@@ -41,6 +40,7 @@ void ChatApp::notify(Component *sender, const std::string &event) {
             chatRegisterController = new ChatRegisterController(chatRegister, chatAPI); //FIXME: dangling pointer
             chatRegisterView = new ChatRegisterView(chatRegister, chatRegisterController, this);
             setWindowTitle("Hello, " + QString::fromStdString(chatRegister->getCurrentUser().getNickname()) + "!");
+            setCentralWidget(chatRegisterView);
         } else if (event == "signInFailed"){
             chatRegister->setCurrentUser(User());
             setWindowTitle("ChatApp");
@@ -75,7 +75,7 @@ void ChatApp::connectDialog() {
             close();
         }
         delete chatAPI;
-        chatAPI = new ChatAPI(addressEdit->text().toStdString(), portEdit->text().toInt());
+        chatAPI = new ChatAPI(new QTcpSocketAdapter(addressEdit->text().toStdString(), portEdit->text().toInt()));
     }
 }
 
