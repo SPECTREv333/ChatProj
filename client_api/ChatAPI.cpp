@@ -101,7 +101,7 @@ void ChatAPI::handleUserListResponse(UserListResponse *packet) {
 }
 
 
-bool ChatAPI::refreshUsers() {
+void ChatAPI::refreshUsers() {
     Packet *packet = new UserList();
     socket->write(packet->encode());
     delete packet;
