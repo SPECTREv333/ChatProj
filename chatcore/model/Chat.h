@@ -15,6 +15,8 @@ public:
 
     Chat(const Chat &rhs) = delete;
 
+    ~Chat() override;
+
     Chat &operator=(const Chat &rhs) = delete;
 
     void addMessage(Message &message);

@@ -68,6 +68,7 @@ void ChatAPI::newPacket() {
             handleUserListResponse(reinterpret_cast<UserListResponse *>(packet));
         }
     }
+    delete packet;
 }
 
 void ChatAPI::handleSignXResponse(SignXResponse *response) {

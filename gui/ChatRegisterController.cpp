@@ -16,7 +16,14 @@ void ChatRegisterController::refresh() {
 
 void ChatRegisterController::openChat(int id, QWidget* parent) {
     auto &chat = model->getChatById(id);
-    auto *chatController = new ChatController(&chat, chatAPI); //FIXME: dangling pointer
+    auto* chatController = new ChatController(&chat, chatAPI);
+    managedChatControllers.push_back(chatController);
     auto *chatView = new ChatView(&chat, chatController, parent);
     chatView->show();
+}
+
+ChatRegisterController::~ChatRegisterController() {
+    for (auto &chatController: managedChatControllers) {
+        delete chatController;
+    }
 }

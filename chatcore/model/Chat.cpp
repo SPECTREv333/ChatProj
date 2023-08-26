@@ -34,3 +34,8 @@ const User &Chat::getRemoteUser() const {
 const std::list<Message *> &Chat::getMessages() const {
     return messages;
 }
+
+Chat::~Chat() {//delete all messages
+    for (auto &message: messages)
+        delete message;
+}

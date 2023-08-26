@@ -17,6 +17,8 @@ Q_OBJECT
 public:
     ChatApp(QWidget *parent = nullptr);
 
+    ~ChatApp() override;
+
     void notify(Component *sender, const std::string& event) override;
 
 private:

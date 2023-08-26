@@ -79,4 +79,10 @@ void ChatApp::connectDialog() {
     }
 }
 
+ChatApp::~ChatApp() {
+    delete chatAPI;
+    delete chatRegister;
+    delete chatRegisterController;
+}
+
 

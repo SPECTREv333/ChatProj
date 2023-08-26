@@ -12,6 +12,10 @@ void QTcpServerAdapter::newConnection() {
     }
 }
 
+// when the disconnect signal is emitted, the associated EventSocket
+// destructor is called, which in turn deletes the socket
+// QTcpServerAdapter does not have ownership of the socket, it's just a mere address
+// this might need to be changed to a weak pointer
 void QTcpServerAdapter::onDisconnect() {
     auto *socket = reinterpret_cast<QTcpSocket *>(sender());
     if (receiver) receiver->onDisconnect(clients[socket]);
@@ -46,11 +50,3 @@ QTcpServerAdapter::QTcpServerAdapter(int port, EventSocketServerReceiver *receiv
 void QTcpServerAdapter::setReceiver(EventSocketServerReceiver *receiver) {
     this->receiver = receiver;
 }
-
-
-
-
-
-
-
-

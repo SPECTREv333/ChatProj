@@ -9,12 +9,15 @@
 #include "../model/ChatRegister.h"
 #include "Mediator.h"
 #include "../client_api/ChatAPI.h"
+#include "ChatController.h"
 
 class ChatRegisterController {
 public:
     ChatRegisterController(ChatRegister *model, ChatAPI *chatApi) :
             model(model),
             chatAPI(chatApi) {};
+
+    ~ChatRegisterController();
 
     void refresh();
 
@@ -23,6 +26,7 @@ public:
 private:
     ChatAPI *chatAPI;
     ChatRegister *model;
+    std::list<ChatController*> managedChatControllers;
 };
 
 
