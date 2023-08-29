@@ -18,6 +18,7 @@ ChatRegisterView::ChatRegisterView(ChatRegister *model, ChatRegisterController* 
 }
 
 ChatRegisterView::~ChatRegisterView() {
+    model->removeObserver(this);
     delete ui;
 }
 

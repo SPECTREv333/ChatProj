@@ -8,6 +8,7 @@
 #include "ui_ChatView.h"
 
 ChatView::~ChatView() {
+    model->removeObserver(this);
     delete ui;
 }
 
