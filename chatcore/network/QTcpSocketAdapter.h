@@ -25,8 +25,6 @@ public:
 
     explicit QTcpSocketAdapter(QTcpSocket *socket, QObject *parent = nullptr);
 
-    ~QTcpSocketAdapter() override;
-
     bool isConnected() const;
 
     const QTcpSocket *getSocket() const;

@@ -29,12 +29,6 @@ void QTcpSocketAdapter::onDisconnect() {
     qInfo() << "QTcpSocketAdapter disconected";
 }
 
-QTcpSocketAdapter::~QTcpSocketAdapter() {
-    if(socket && socket->isOpen()){
-        socket->close();
-    }
-}
-
 void QTcpSocketAdapter::displayState() {
     qInfo() << "socket state changed to " << socket->state();
 }
