@@ -30,10 +30,10 @@ set(CLIENT_SOURCES
         gui/ChatRegisterController.h
         gui/chatregisterview.cpp
         gui/chatregisterview.h
-        gui/chatregisterview.ui
+        gui/ChatRegisterView.ui
         gui/chatview.cpp
         gui/chatview.h
-        gui/chatview.ui
+        gui/ChatView.ui
         patterns/Mediator.h
         patterns/Observer.h
         patterns/Subject.h

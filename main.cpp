@@ -10,7 +10,7 @@
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
-    ChatApp chatApp1(dynamic_cast<QWidget*>(&a));
+    ChatApp chatApp1(nullptr);
 
     chatApp1.show();
 
