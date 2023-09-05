@@ -80,6 +80,10 @@ void ChatApp::connectDialog() {
 }
 
 ChatApp::~ChatApp() {
+    // chatRegisterView needs to be deleted before its model (chatRegister)
+    // because it is an observer of chatRegister
+    if (chatRegisterView != nullptr)
+        delete chatRegisterView;
     delete chatAPI;
     delete chatRegister;
     delete chatRegisterController;
