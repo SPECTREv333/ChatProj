@@ -31,8 +31,6 @@ public:
 
     void setSocket(QTcpSocket *socket);
 
-    const std::string syncread() override;
-
     const std::string read() override;
 
     void write(const std::string &message) override;

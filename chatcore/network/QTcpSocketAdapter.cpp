@@ -57,15 +57,6 @@ void QTcpSocketAdapter::displayError() {
     qInfo() << socket->errorString();
 }
 
-const std::string QTcpSocketAdapter::syncread() {
-    QByteArray buffer;
-    socket->waitForReadyRead();
-    buffer = socket->readAll();
-    std::string messagestr = buffer.toStdString();
-    qInfo() << messagestr;
-    return messagestr;
-}
-
 bool QTcpSocketAdapter::isConnected() const {
     return socket->isOpen();
 }

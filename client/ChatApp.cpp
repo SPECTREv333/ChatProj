@@ -5,10 +5,12 @@
 #include "ChatApp.h"
 #include "SignXDialog.h"
 #include "QTcpSocketAdapter.h"
+#include "QWebSocketAdapter.h"
 #include <QDialog>
 #include <QFormLayout>
 #include <QMessageBox>
 #include <QDialogButtonBox>
+#include <QCheckBox>
 
 ChatApp::ChatApp(QWidget *parent) : QMainWindow(parent) {
     chatAPI = nullptr;
@@ -61,8 +63,10 @@ void ChatApp::connectDialog() {
     auto *formLayout = new QFormLayout(dialog);
     auto *addressEdit = new QLineEdit(dialog);
     auto *portEdit = new QLineEdit(dialog);
+    auto *secureCheckBox = new QCheckBox(dialog);
     formLayout->addRow("Address:", addressEdit);
     formLayout->addRow("Port:", portEdit);
+    formLayout->addRow("Secure:", secureCheckBox);
     auto *buttonBox = new QDialogButtonBox(dialog);
     buttonBox->addButton("Connect", QDialogButtonBox::AcceptRole);
     buttonBox->addButton("Cancel", QDialogButtonBox::RejectRole);
@@ -75,7 +79,10 @@ void ChatApp::connectDialog() {
             close();
         }
         delete chatAPI;
-        chatAPI = new ChatAPI(new QTcpSocketAdapter(addressEdit->text().toStdString(), portEdit->text().toInt()));
+        if (secureCheckBox->isChecked())
+            chatAPI = new ChatAPI(new QWebSocketAdapter(addressEdit->text().toStdString(), portEdit->text().toInt()));
+        else
+            chatAPI = new ChatAPI(new QTcpSocketAdapter(addressEdit->text().toStdString(), portEdit->text().toInt()));
     }
 }
 

@@ -23,7 +23,7 @@ void ChatRegisterController::openChat(int id, QWidget* parent) {
 }
 
 ChatRegisterController::~ChatRegisterController() {
-    for (auto &chatController: managedChatControllers) {
+    for (auto chatController: managedChatControllers) {
         delete chatController;
     }
 }

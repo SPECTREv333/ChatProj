@@ -17,7 +17,6 @@ public:
     virtual ~EventSocket() = default;
     virtual const std::string read() = 0;
     virtual void write(const std::string &text) = 0;
-    virtual const std::string syncread() = 0;
     virtual void setReceiver(EventSocketReceiver *receiver) = 0;
 };
 
