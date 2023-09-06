@@ -23,7 +23,7 @@ ChatApp::ChatApp(QWidget *parent) : QMainWindow(parent) {
     }
 
     if (chatAPI == nullptr)
-        close();
+        exit(0); // close() is not available in constructor
 
     chatRegister = new ChatRegister();
 
